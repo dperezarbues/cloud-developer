@@ -11,14 +11,17 @@ import * as EmailValidator from 'email-validator';
 const router: Router = Router();
 
 async function generatePassword(plainTextPassword: string): Promise<string> {
+    return new Promise(()=>{});
     //@TODO Use Bcrypt to Generated Salted Hashed Passwords
 }
 
 async function comparePasswords(plainTextPassword: string, hash: string): Promise<boolean> {
+    return new Promise(()=>{});
     //@TODO Use Bcrypt to Compare your password to your Salted Hashed Password
 }
 
 function generateJWT(user: User): string {
+    return '';
     //@TODO Use jwt to create a new JWT Payload containing
 }
 
