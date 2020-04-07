@@ -1,6 +1,7 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {filterImageFromURL, deleteLocalFiles, validURL} from './util/util';
+var fs = require('fs');
 
 (async () => {
 
@@ -9,6 +10,13 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   // Set the network port
   const port = process.env.PORT || 8082;
+
+  const mime = {
+    gif: 'image/gif',
+    jpg: 'image/jpeg',
+    png: 'image/png',
+    svg: 'image/svg+xml',
+  };
   
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
@@ -31,12 +39,46 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   //! END @TODO1
   
+  app.get( "/filteredimage", async ( req: Request, res: Response ) => {
+    const { image_url } = req.query;
+
+    if ( !image_url ) {
+      return res.status(400)
+                .send(`No URL provided, please provide an url query parameter`);
+    }
+    if ( !validURL(image_url) ) {
+      return res.status(422)
+                .send(`Wrong URL provided, please validate url parameter`);
+    }
+
+    const filteredImage: Promise<string> = filterImageFromURL(image_url);
+    filteredImage
+      .then((image:string) => {
+        const stream = fs.createReadStream(image);
+        stream.on('open', function () {
+            res.set('Content-Type', mime.jpg);
+            stream.pipe(res);
+        });
+        stream.on('error', function () {
+            res.set('Content-Type', 'text/plain');
+            res.status(404).end('Not found');
+        });
+        image && deleteLocalFiles([image]);
+      })
+      .catch((e: Error) => res.status(500).send(`Something went wrong: ` + e.message));
+  });
+
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
+  app.get( "/", async ( req: Request, res: Response ) => {
+    res.status(404).send("try GET /filteredimage?image_url={{}}")
   } );
   
+  // Monitoring Endpoint
+  // Allows proper AWS monitoring
+  app.get( "/health", async ( req: Request, res: Response ) => {
+    res.status(200).send("Server Up & Running")
+  } );
 
   // Start the Server
   app.listen( port, () => {
