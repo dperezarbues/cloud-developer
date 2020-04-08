@@ -29,9 +29,9 @@ spec:
               name: env-config
               key: URL 
         - name: JWT_SECRET
-          secretKeyRef:
-            name: env-secret
-              name: env-config
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
               key: JWT_SECRET
         - name: POSTGRESS_DB
           valueFrom:
