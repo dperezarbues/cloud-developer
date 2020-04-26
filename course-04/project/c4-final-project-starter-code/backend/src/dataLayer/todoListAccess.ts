@@ -89,7 +89,7 @@ export class ToDoListAccess {
           ":name": toDoUpdate.name,
           ":dueDate": toDoUpdate.dueDate,
           ":done": toDoUpdate.done,
-          ":attachment": toDoUpdate.attachment
+          ":attachment": toDoUpdate.attachment || ''
       },
       ExpressionAttributeNames: {
         "#n":"name"
@@ -121,5 +121,5 @@ function createDynamoDBClient() {
     })
   }
 
-  return new XAWS.DynamoDB.DocumentClient()
+  return new XAWS.DynamoDB.DocumentClient({convertEmptyValues: true})
 }
