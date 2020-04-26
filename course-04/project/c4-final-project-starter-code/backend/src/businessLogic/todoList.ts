@@ -53,7 +53,7 @@ export async function updateToDoItem(
     name: updateTodoRequest.name,
     dueDate: updateTodoRequest.dueDate,
     done: updateTodoRequest.done,
-    attachment: updateTodoRequest.attachment
+    attachmentUrl: updateTodoRequest.attachmentUrl
   }
 
   return await toDoListAccess.updateToDo(todoUpdate);

@@ -41,7 +41,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     name: todoItem.name,
     dueDate: todoItem.dueDate,
     done: todoItem.done,
-    attachment: `https://${bucketName}.s3.amazonaws.com/${imageId}`
+    attachmentUrl: `https://${bucketName}.s3.amazonaws.com/${imageId}`
   }
 
   await updateToDoItem (updateTodoRequest,todoId,userId)

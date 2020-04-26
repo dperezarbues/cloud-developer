@@ -84,12 +84,12 @@ export class ToDoListAccess {
         userId: toDoUpdate.userId,
         todoId: toDoUpdate.todoId
       },
-      UpdateExpression: "set #n = :name, dueDate=:dueDate, done=:done, attachment=:attachment",
+      UpdateExpression: "set #n = :name, dueDate=:dueDate, done=:done, attachmentUrl=:attachmentUrl",
       ExpressionAttributeValues:{
           ":name": toDoUpdate.name,
           ":dueDate": toDoUpdate.dueDate,
           ":done": toDoUpdate.done,
-          ":attachment": toDoUpdate.attachment || ''
+          ":attachmentUrl": toDoUpdate.attachmentUrl || ''
       },
       ExpressionAttributeNames: {
         "#n":"name"
