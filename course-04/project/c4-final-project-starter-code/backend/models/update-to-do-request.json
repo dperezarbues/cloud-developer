@@ -12,7 +12,7 @@
     "done": {
       "type": "boolean"
     },
-    "attachment": {
+    "attachmentUrl": {
       "type": "string"
     }
   },
